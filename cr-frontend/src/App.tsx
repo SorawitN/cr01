@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -9,7 +8,7 @@ const App = () => {
   const [courses, setCourse] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/frozen/')
+    fetch('http://localhost:3000/Course/')
       .then(res => res.json())
       .then(courses => {
         setCourse(courses);

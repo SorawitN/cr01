@@ -1,26 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
+import { Course } from './interface/course.interface';
+import { CourseService } from './course.service';
 
-@Controller('frozen')
+@Controller('Course')
 export class CourseController {
+    constructor(private courseService: CourseService) {}
 
-  @Get()
-  findAll(): any {
-    return [
-        {
-        id: '100',
-        number: '01204111',
-        title: 'Programming'
-        },
-        {
-        id: '200',
-        number: '01204211',
-        title: 'Discreate Math'
-        },
-        {
-        id: '300',
-        number: '01204313',
-        title: 'Design and Analysis'
-        },
-    ];
-  }
+    @Get()
+    async findAll(): Promise<Course[]> {
+        return this.courseService.findAll();
+    }
+
 }
