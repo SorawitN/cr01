@@ -4,24 +4,28 @@ import './App.css';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
-/* Hook method
+ 
 const App = () => {
-  const [message, setMessage] = useState('My message');
+  const [courses, setCourse] = useState<any[]>([]);
 
   useEffect(() => {
     fetch('http://localhost:3000/frozen/')
       .then(res => res.json())
-      .then(obj => {
-        setMessage(obj.message);
+      .then(courses => {
+        setCourse(courses);
       });
   },[]);
 
   return (
     <div className="App">
-      {message}
+      <ul>
+        {courses.map(item => (
+          <li key={item.id}>{item.number} - {item.title}</li>
+        ))}
+      </ul>
     </div>
   );
-} */
+} 
 
 /* Class component method
 type AppState = {
@@ -49,34 +53,5 @@ class App extends React.Component<{}, AppState> {
     );
   }
 }  */
-
-type AppProps = {
-  // using `interface` is also ok
-  message?: string;
-};
-type AppState = {
-  counter: number; // like this
-};
-class App extends React.Component<AppProps, AppState> {
-  state: AppState = {
-    counter: 0
-  }
-
-  incCounter = () => {
-    this.setState({counter: this.state.counter + 1})
-  };
-
-  render() {
-    return (
-      <div>
-        {this.props.message ? this.props.message : "nothing here"} 
-        <br/>
-        Counter = {this.state.counter}
-        <br/>
-        <button onClick={this.incCounter}>Increment</button>
-      </div>
-    );
-  }
-}
 
 export default App;
