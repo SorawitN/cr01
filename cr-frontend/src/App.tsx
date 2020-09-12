@@ -3,9 +3,11 @@ import './App.css';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
- 
+import { Course } from './interface';
+import CourseItem from './CourseItem';
+
 const App = () => {
-  const [courses, setCourse] = useState<any[]>([]);
+  const [courses, setCourse] = useState<Course[]>([]);
 
   useEffect(() => {
     fetch('http://localhost:3000/Course/')
@@ -19,7 +21,7 @@ const App = () => {
     <div className="App">
       <ul>
         {courses.map(item => (
-          <li key={item.id}>{item.number} - {item.title}</li>
+          <CourseItem key={item.id} course={item} />
         ))}
       </ul>
     </div>
