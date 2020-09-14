@@ -1,5 +1,5 @@
 import { async } from "rxjs";
-import { Course } from '../interface';
+import { Course , Review} from '../interface';
 import { baseUrl } from '../config/constant';
 
 
@@ -27,7 +27,14 @@ async function createCourse(newCourse: Course): Promise<Course|null> {
         }
 };
 
+async function fetchReviews(courseID: string): Promise<Review[]> {
+    const res = await fetch(`${baseUrl}/Course/${courseID}/reviews`);
+    const reviews = await res.json();
+    return reviews;
+}
+
 export default {
     fetchCourse,
     createCourse,
+    fetchReviews,
 }
