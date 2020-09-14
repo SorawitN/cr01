@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { Course } from '../interface';
+import CourseService from '../services/CourseService';
 
 type NewCourseFrom = {
     onNewCourseCreate?: (newCourse: Course) => void,
@@ -25,23 +26,19 @@ const NewCourseForm = (props: NewCourseFrom) => {
             title : newCourseTitle,
         };
 
-        fetch("http://localhost:3000/course/",
-        {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(newCourse),
-        }).then(res => res.json()).then(savedNewCourse => { 
-            if (savedNewCourse.id === undefined )
+        CourseService.createCourse(newCourse)
+        .then(savedNewCourse => {
+            if (savedNewCourse !== null )
                 {
-                    alert("save error");
+                   if(props.onNewCourseCreate !== undefined ){
+                       props.onNewCourseCreate(savedNewCourse);
+                       alert("sace successful");
+                   }
                 }
             else{
-                    if(props.onNewCourseCreate !== undefined) {
-                        props.onNewCourseCreate(savedNewCourse);
-                        alert("save successful");
-                    }
+                    alert("save erros");
                 }
-            });
+        });
       };
     return (
         <div>
