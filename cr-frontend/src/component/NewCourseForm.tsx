@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
+import { Course } from '../interface';
 
 type NewCourseFrom = {
+    onNewCourseCreate?: (newCourse: Course) => void,
 };
 
 const NewCourseForm = (props: NewCourseFrom) => {
@@ -16,8 +18,30 @@ const NewCourseForm = (props: NewCourseFrom) => {
         setNewCourseTitle(e.target.value)
       }
     
-      const handleSave = () => {
-        alert(`${newCourseNumber} -- ${newCourseTitle}`)
+      const handleSave = () => {    
+        //alert(`${newCourseNumber} -- ${newCourseTitle}`)
+        const newCourse  = {
+            number : newCourseNumber,
+            title : newCourseTitle,
+        };
+
+        fetch("http://localhost:3000/course/",
+        {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(newCourse),
+        }).then(res => res.json()).then(savedNewCourse => { 
+            if (savedNewCourse.id === undefined )
+                {
+                    alert("save error");
+                }
+            else{
+                    if(props.onNewCourseCreate !== undefined) {
+                        props.onNewCourseCreate(savedNewCourse);
+                        alert("save successful");
+                    }
+                }
+            });
       };
     return (
         <div>
