@@ -1,4 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
+import { Formik, Form, Field, ErrorMessage, setNestedObjectValues } from 'formik';
+
 import { Course } from '../interface';
 import CourseService from '../services/CourseService';
 
@@ -8,43 +10,59 @@ type NewCourseFrom = {
 
 const NewCourseForm = (props: NewCourseFrom) => {
 
-    const [newCourseNumber, setNewCourseNumber] = useState<string>(' ');
-    const [newCourseTitle, setNewCourseTitle] = useState<string>(' ');
-  
-    const handleNewCouseNumberChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-        setNewCourseNumber(e.target.value)
-      }
-    
-      const handleNewCouseTitleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-        setNewCourseTitle(e.target.value)
-      }
-    
-      const handleSave = () => {    
-        //alert(`${newCourseNumber} -- ${newCourseTitle}`)
-        const newCourse  = {
-            number : newCourseNumber,
-            title : newCourseTitle,
-        };
-
-        CourseService.createCourse(newCourse)
-        .then(savedNewCourse => {
-            if (savedNewCourse !== null )
-                {
-                   if(props.onNewCourseCreate !== undefined ){
-                       props.onNewCourseCreate(savedNewCourse);
-                       alert("sace successful");
-                   }
-                }
-            else{
-                    alert("save erros");
-                }
-        });
-      };
     return (
         <div>
-            Number: <input value={newCourseNumber} onChange={handleNewCouseNumberChange} /><br />
-            Title: <input value={newCourseTitle} onChange={handleNewCouseTitleChange} /><br />
-            <button onClick={handleSave}>Save</button>
+            <Formik
+                initialValues={{ newCourseNumber:'', newCourseTitle:''}}
+                validate = { value => {
+                    const errors: any = {};
+
+                    if (value.newCourseTitle === ''){
+                        errors.newCourseTitle = 'Course title is required.';
+                    }
+                    if (value.newCourseNumber === ''){
+                        errors.newCourseNumber = 'Course number is required.';
+
+                    } else if(!/^[0-9]+$/.test(value.newCourseNumber)){
+                        errors.newCourseNumber = 'Course number format error';
+                    }
+                    return errors;
+                }}
+
+                onSubmit={(value, actions) => {
+                    const newCourse  = {
+                        number : value.newCourseNumber,
+                        title : value.newCourseTitle,
+                    };
+            
+                    CourseService.createCourse(newCourse)
+                    .then(savedNewCourse => {
+                        if (savedNewCourse !== null )
+                            {
+                               if(props.onNewCourseCreate !== undefined ){
+                                   props.onNewCourseCreate(savedNewCourse);
+                                   alert("sace successful");
+                               }
+                            }
+                        else{
+                                alert("save erros");
+                            }
+                            actions.setSubmitting(false);
+                    });
+                }}
+            >
+             {({isSubmitting}) => (
+                 <Form>
+                     Number: <Field type="input" name="newCourseNumber" />
+                     <ErrorMessage name="newCourseNumber" component="div" />
+                     <br />
+                     Title: <Field type="input" name="newCourseTitle" />
+                     <ErrorMessage name="newCourseTitle" component="div" />
+                     <br />
+                     <button disabled={isSubmitting}>save</button>
+                 </Form>
+             )}            
+            </Formik>
         </div>
     )
 };
