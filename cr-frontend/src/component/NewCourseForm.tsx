@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik, Form, Field, ErrorMessage, setNestedObjectValues } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import { Course } from '../interface';
 import CourseService from '../services/CourseService';
