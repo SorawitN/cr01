@@ -4,6 +4,7 @@ import { ObjectID } from 'mongodb';
 
 import Course from './course.entities';
 import Review from './review.entities';
+import { ParseObjectIDPipe } from '../common/pipes';
 
 import { CreateReviewDto } from './dto/create-review.dto';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -20,29 +21,21 @@ export class CourseController {
 
     @Post()
     async create(@Body() createCourseDto: CreateCourseDto) {
-        if ((createCourseDto.number !== undefined) && (createCourseDto.title !== undefined)){
-            const NewCourse = this.courseService.create(createCourseDto);
-            return NewCourse;
-        } else {
-            throw new HttpException('Bad fucking request', HttpStatus.BAD_REQUEST);
-        }
+        return this.courseService.create(createCourseDto);
     }
 
     @Get(':courseID/reviews')
-    async findAllReviews(@Param('courseID') courseID: string): Promise<Review[]> {
+    async findAllReviews(@Param('courseID', ParseObjectIDPipe) courseID: ObjectID): Promise<Review[]> {
         return this.courseService.findAllReviews(courseID);
     }
 
     @Post(':courseID/reviews')
-    async createReview(@Param('courseID') courseID: string,
+    async createReview(@Param('courseID', ParseObjectIDPipe) courseID: ObjectID,
         @Body() createReviewDto: CreateReviewDto) {
-        if ((createReviewDto.score !== undefined) && (createReviewDto.comment !== undefined)){
-            createReviewDto.courseID = new ObjectID(courseID);
-            const NewReview = this.courseService.createReview(createReviewDto);
-            return NewReview;
-        } else {
-            throw new HttpException('Bad fucking request', HttpStatus.BAD_REQUEST);
-        }
+        createReviewDto.courseID = courseID;
+        const NewReview = this.courseService.createReview(createReviewDto);
+        return NewReview;
+       
     }
 
 }

@@ -1,4 +1,9 @@
+import { IsNotEmpty, IsNumberString } from 'class-validator';
+
 export class CreateCourseDto {
-    number: string;
+    @IsNotEmpty()
     title: string;
+
+    @IsNumberString()
+    number: string;
 }
