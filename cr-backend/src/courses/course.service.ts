@@ -13,12 +13,14 @@ import { CreateReviewDto } from './dto/create-review.dto';
 export class CourseService {
     constructor(
         @InjectRepository(Course) 
+        // สร้าง courseRepository ชี้ไปหา Course
         private coursesRepository: Repository<Course>,
         @InjectRepository(Review) 
+        // สร้าง courseRepository ชี้ไปหา Review
         private reviewRepository: Repository<Review>,
     ) {}
 
-
+    // ดึง Course[] มาจากที่ Repository
     async findAll(): Promise<Course[]> {
         return this.coursesRepository.find();
     }

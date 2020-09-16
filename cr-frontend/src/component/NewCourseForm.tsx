@@ -1,7 +1,10 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
+// type
 import { Course } from '../interface';
+
+// Service
 import CourseService from '../services/CourseService';
 
 type NewCourseFrom = {
@@ -41,7 +44,7 @@ const NewCourseForm = (props: NewCourseFrom) => {
                             {
                                if(props.onNewCourseCreate !== undefined ){
                                    props.onNewCourseCreate(savedNewCourse);
-                                   alert("sace successful");
+                                   alert("save successful");
                                }
                             }
                         else{

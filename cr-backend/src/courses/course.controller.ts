@@ -2,18 +2,22 @@ import { Controller, Get, Post, Body, HttpException, HttpStatus, Param } from '@
 import { CourseService } from './course.service';
 import { ObjectID } from 'mongodb';
 
+// Entities
 import Course from './course.entities';
 import Review from './review.entities';
 import { ParseObjectIDPipe } from '../common/pipes';
 
+// Data transfer object
 import { CreateReviewDto } from './dto/create-review.dto';
 import { CreateCourseDto } from './dto/create-course.dto';
 
 
+// Controller ที่ path = ./course
 @Controller('Course')
 export class CourseController {
     constructor(private courseService: CourseService) {}
 
+    // แสดงผล course[]
     @Get()
     async findAll(): Promise<Course[]> {
         return this.courseService.findAll();
