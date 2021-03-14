@@ -10,11 +10,7 @@ pot1.atten(ADC.ATTN_11DB)
 pot2 = ADC(Pin(35))
 pot2.atten(ADC.ATTN_11DB)
 
-R1 = 30000.0
-R2 = 7500.0
-
 def write_dir(dir):
-    #send data
     print(dir)
    
 def read_local():
@@ -23,14 +19,16 @@ def read_local():
 def read_PIR():
     return False
 
-def check_volt1():
+def check_V_board():
+    # Check Voltage ของ Board
     val11=pot1.read()
     temp=val11/4.092
     val11=temp
     val2=((val11%100)/10.0)
     print("battery voltage =",val2)
 
-def check_volt2():
+def check_V_motor():
+    # Check Voltage ของ Motor
     val11=pot2.read()
     temp=val11/4.092
     val11=temp
@@ -59,10 +57,5 @@ def thd2():
 
 
 #main program    
-#time.sleep(3)
-
+time.sleep(3)
 while(True):
-    check_volt1()
-    time.sleep(0.1)
-    check_volt2()
-    time.sleep(0.1)
