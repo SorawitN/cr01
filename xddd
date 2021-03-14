@@ -4,8 +4,14 @@ from machine import Pin, I2C, ADC
 
 i2c = I2C(scl=Pin(22),sda=Pin(21),freq=100000)
 
-pot = ADC(Pin(34))
-pot.atten(ADC.ATTN_11DB)  
+pot1 = ADC(Pin(34))
+pot1.atten(ADC.ATTN_11DB)
+
+pot2 = ADC(Pin(35))
+pot2.atten(ADC.ATTN_11DB)
+
+R1 = 30000.0
+R2 = 7500.0
 
 def write_dir(dir):
     #send data
@@ -16,6 +22,21 @@ def read_local():
 
 def read_PIR():
     return False
+
+def check_volt1():
+    val11=pot1.read()
+    temp=val11/4.092
+    val11=temp
+    val2=((val11%100)/10.0)
+    print("battery voltage =",val2)
+
+def check_volt2():
+    val11=pot2.read()
+    temp=val11/4.092
+    val11=temp
+    val2=((val11%100)/10.0)
+    print("motor voltage =",val2)
+
 
 def thd1():
     write_dir(1) #front
@@ -32,9 +53,7 @@ def thd2():
     status = read_local()
     print(status)
 
-def check_voltage():
-    # รอต่อ voltage sensor
-    return True
+
 
 
 
@@ -43,9 +62,7 @@ def check_voltage():
 #time.sleep(3)
 
 while(True):
-    voltage = pot.read()
-    voltage = voltage/4.092
-    voltage = (voltage%100)/10
-    
+    check_volt1()
     time.sleep(0.1)
-   
+    check_volt2()
+    time.sleep(0.1)
