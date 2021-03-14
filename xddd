@@ -1,0 +1,51 @@
+import uasyncio
+import time
+from machine import Pin, I2C, ADC
+
+i2c = I2C(scl=Pin(22),sda=Pin(21),freq=100000)
+
+pot = ADC(Pin(34))
+pot.atten(ADC.ATTN_11DB)  
+
+def write_dir(dir):
+    #send data
+    print(dir)
+   
+def read_local():
+    return "unknow"
+
+def read_PIR():
+    return False
+
+def thd1():
+    write_dir(1) #front
+    time.sleep(6)
+    write_dir(0) #stop
+    found  = read_PIR()
+    if found:
+        print("Person detected")
+    else:
+        print("Detect none")
+
+def thd2():
+    print("thd2")
+    status = read_local()
+    print(status)
+
+def check_voltage():
+    # รอต่อ voltage sensor
+    return True
+
+
+
+
+#main program    
+#time.sleep(3)
+
+while(True):
+    voltage = pot.read()
+    voltage = voltage/4.092
+    voltage = (voltage%100)/10
+    
+    time.sleep(0.1)
+   
